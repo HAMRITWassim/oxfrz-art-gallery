@@ -220,23 +220,25 @@ function App() {
         </span>
 
         <div 
-            className={`pointer-events-auto w-full h-full hover:cursor-pointer transition-all duration-300 flex items-center justify-center ${isTextClicked ? "opacity-0" : "opacity-100"}`}
-            onClick={() => {
-                window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
-                setTimeout( () => { setIsTextClicked(true); }, 300)
-            }}
+            className={`pointer-events-auto w-full h-full transition-all duration-300 flex items-center justify-center ${isTextClicked ? "opacity-0" : "opacity-100"}`}
+
         >
             <RotatingText
                 index={i}               
                 texts={pageNames}  
                 direction={direction}   
-                mainClassName="font-persona text-[#6E3918] text-[2.5em] hover:text-[2.7em] hover:text-[#ff7700] transition-all duration-300 overflow-hidden py-8"
+                mainClassName="font-persona text-[#6E3918] text-[2.5em] hover:text-[2.7em] hover:text-[#ff7700] transition-all duration-300 overflow-hidden py-8 hover:cursor-pointer"
                 staggerFrom={"last"}
                 staggerDuration={0.025}
                 splitLevelClassName="overflow-hidden pb-0.5"
-                
+
                 onMouseEnter={() => setIsTextHovered(true)}
                 onMouseLeave={() => setIsTextHovered(false)}
+
+                onClick={() => {
+                    window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+                    setTimeout( () => { setIsTextClicked(true); }, 300)
+                }}
             />
 
         </div>
