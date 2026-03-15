@@ -1,15 +1,19 @@
 import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
 import { useState, useRef, useMemo} from 'react';
+
+//components
 import CurvedLoop from './components/CurvedLoop';
 import RotatingText from "./components/RotatingText";
 import FaultyTerminal from './components/FaultyTerminal';
+
+import { useNavigate } from 'react-router-dom';
 
 
 if (typeof history !== 'undefined' && 'scrollRestoration' in history) {
   history.scrollRestoration = 'manual';
 }
 
-function App() {
+function Home() {
 
     const container = useRef();
     const pageNames = ["DRAWINGS","ANIMATIONS","OTHERS"];
@@ -20,6 +24,8 @@ function App() {
     const[direction, setDirection] = useState(1);
     const[upTri, setUpTri] = useState("△");
     const[downTri, setDownTri] = useState("▽");
+
+    const navigate = useNavigate();
 
 
     // FRAMER MOTION
@@ -238,6 +244,12 @@ function App() {
                 onClick={() => {
                     window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
                     setTimeout( () => { setIsTextClicked(true); }, 300)
+
+                    const destination = pageNames[i].toLowerCase();
+
+                    setTimeout(() => {
+                        navigate(`/${destination}`)
+                    }, 3400)
                 }}
             />
 
@@ -299,4 +311,4 @@ function App() {
   )
 }
 
-export default App
+export default Home
