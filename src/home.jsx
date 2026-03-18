@@ -144,7 +144,7 @@ function Home() {
                 curveAmount={300}
                 direction="right"
                 interactive
-                className="custom-text-style"
+                className="custom-text-style font-bitcount text-[#6E3918] "
             />
         </div>
 
@@ -193,7 +193,7 @@ function Home() {
                     )}
 
 <div 
-    className="absolute top-[34%] left-[2%] w-[80%] h-[55%] rounded-xl overflow-hidden flex items-center justify-center bg-zinc-700 transition-colors duration-300"
+    className="absolute top-[34%] left-[2%] w-[80%] h-[55%] rounded-xl overflow-hidden flex items-center justify-center bg-[#000000] transition-colors duration-300"
 >
     <div 
         className={`absolute inset-0 z-0 transition-opacity duration-700 

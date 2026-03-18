@@ -11,6 +11,9 @@ export default {
         david: ['"David Libre"', "serif"],
         bebas: ['"Bebas Neue"', 'sans-serif'],
         montserrat: ['Montserrat', 'sans-serif'],
+        times: ['"Times New Roman"', 'Times', 'serif'],
+        bitcount: ['"Bitcount Prop Double"', 'sans-serif'],
+
 
       }
     },
