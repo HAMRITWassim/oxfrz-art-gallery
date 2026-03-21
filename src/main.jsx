@@ -32,7 +32,9 @@ const router = createBrowserRouter([
   // },
 
 
-]);
+], {
+  basename: "/oxfrz-art-gallery"
+});
 
 
 createRoot(document.getElementById("root")).render(

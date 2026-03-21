@@ -214,7 +214,7 @@ function Home() {
 
                     {/* MAIN TV */}
                     <img
-                    src='./tv_clear.png'
+                    src={`${import.meta.env.BASE_URL}tv_clear.png`}
                     className='h-full w-auto relative z-30 block pointer-events-none'
                     alt='TV'
                     />
@@ -224,11 +224,12 @@ function Home() {
                     <video 
                         width="100%" 
                         height="100%" 
-                        muted 
+                        muted
+                        preload="auto" 
                         autoPlay 
                         className='absolute top-[34%] right-[4%] w-[100%] h-[55%] z-20 pointer-events-none object-cover'
                     >
-                        <source src="TRANSITION.webm" type='video/webm'/>
+                        <source src={`${import.meta.env.BASE_URL}TRANSITION.webm`} type='video/webm'/>
                     </video>
                     )}
 
@@ -346,7 +347,7 @@ function Home() {
             originY: origin,
         }}
         >
-                <img src="./stripes.png" alt="stripes" />
+                <img src={`${import.meta.env.BASE_URL}stripes.png`} alt="stripes" />
         </motion.div>
 
       </div>

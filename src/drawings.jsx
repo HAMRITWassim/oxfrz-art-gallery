@@ -17,7 +17,10 @@ const mediaModules = import.meta.glob('./assets/drawings/*.{png,jpg,jpeg,avif,we
     eager: true, 
     import: 'default' 
 });
-const rawImages = Object.values(mediaModules);
+const rawImages = Object.entries(mediaModules).map(([path, url]) => ({
+    originalFilename: decodeURIComponent(path.split('/').pop()),
+    url: url
+}));
 
 
 
@@ -59,23 +62,25 @@ function Drawings() {
             const landscapes = [];
 
             
-            const checkDimensions = rawImages.map((url) => {
+           const checkDimensions = rawImages.map((mediaItem) => {
                 return new Promise((resolve) => {
                     
-                    const filename = decodeURIComponent(url.split('/').pop());
-                    const date = mediaDates[filename] || "Date not found";
+                    const date = mediaDates[mediaItem.originalFilename] || "Date not found";
+                    const url = mediaItem.url;
+
+                    const cleanTitle = mediaItem.originalFilename.replace(/\.[^/.]+$/, "");
 
                     const isVideo = url.match(/\.(mp4|webm|ogg)$/i);
                     if (isVideo) {
                         const video = document.createElement('video');
                         video.onloadedmetadata = () => {
-                            resolve({ url, isLandscape: video.videoWidth > video.videoHeight, date });
+                            resolve({ url, isLandscape: video.videoWidth > video.videoHeight, date, title: cleanTitle });
                         };
                         video.src = url;
                     } else {
                         const img = new Image();
                         img.onload = () => {
-                            resolve({ url, isLandscape: img.naturalWidth > img.naturalHeight, date });
+                            resolve({ url, isLandscape: img.naturalWidth > img.naturalHeight, date, title: cleanTitle });
                         };
                         img.src = url;
                     }
@@ -129,11 +134,12 @@ function Drawings() {
                                 ref={videoRef}
                                 width="100%" 
                                 height="100%" 
-                                muted 
+                                muted
+                                preload="auto" 
                                 autoPlay 
                                 className='fixed w-[100%] h-[100%] z-50 pointer-events-none object-cover'
                             >
-                                <source src="/REV.webm" type='video/webm'/>
+                                <source src={`${import.meta.env.BASE_URL}REV.webm`} type='video/webm'/>
                             </video>
 
                             <motion.div 
@@ -188,7 +194,12 @@ function Drawings() {
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-64 w-full max-w-7xl mx-auto auto-rows-[minmax(300px,_auto)]">
                                 {sortedMedia.map((item, index) => (
                                     <div key={index} className={`flex flex-col relative ${item.isLandscape ? 'md:col-span-2' : ''}`}>
-                                        <Window media={item.url} isLandscape={item.isLandscape} date={item.date} />
+                                        <Window 
+                                            media={item.url} 
+                                            isLandscape={item.isLandscape} 
+                                            date={item.date} 
+                                            title={item.title} 
+                                        />
                                     </div>
                                 ))}
                             </div>

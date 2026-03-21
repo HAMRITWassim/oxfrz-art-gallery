@@ -19,8 +19,13 @@ const animationModules = import.meta.glob('./assets/animations/*.{mp4,webm,ogg}'
     eager: true, 
     import: 'default' 
 });
-const animations = Object.values(animationModules);
 
+const animations = Object.entries(animationModules).map(([path, url]) => {
+    return {
+        originalName: decodeURIComponent(path.split('/').pop()), 
+        url: url 
+    };
+});
 
 
 
@@ -110,11 +115,12 @@ export default function Animations() {
                         ref={videoRef}
                         width="100%" 
                         height="100%" 
-                        muted 
+                        muted
+                        preload="auto"  
                         autoPlay 
                         className='fixed w-[100%] h-[100%] z-50 pointer-events-none object-cover'
                     >
-                        <source src="/REV.webm" type='video/webm'/>
+                        <source src={`${import.meta.env.BASE_URL}REV.webm`} type='video/webm'/>
                     </video>
 
                     <motion.div 
@@ -165,10 +171,9 @@ export default function Animations() {
                             <div className="overflow-hidden" ref={emblaRef}>
                                 <div className="flex touch-pan-y touch-pinch-zoom">
 
-                                    {animations.map((videoUrl, index) => {
-                                        
-                                        const rawFilename = decodeURIComponent(videoUrl.split('/').pop());
-                                        
+                                    {animations.map((item, index) => {
+    
+                                        const rawFilename = item.originalName;
                                         const videoDate = mediaDates[rawFilename] || "";
                                         
                                         const videoName = rawFilename.replace(/\.[^/.]+$/, "");
@@ -179,25 +184,23 @@ export default function Animations() {
                                                 {/* LA VIDÉO */}
                                                 <div className="relative h-full aspect-[9/16] shrink-0 hover:cursor-default">
                                                     <video 
-                                                        src={videoUrl}
+                                                        src={item.url}
                                                         autoPlay 
-                                                        muted 
+                                                        muted
+                                                        preload="auto" 
                                                         loop 
                                                         playsInline
-                                                        className="w-full h-full object-cover rounded-xl" 
+                                                        className="w-full h-full object-cover rounded-xl cursor-pointer" 
                                                         onClick={(e) => {
-                                                            if (e.target.paused) {
-                                                                e.target.play();
-                                                            } else {
-                                                                e.target.pause();
-                                                            }
+                                                            if (e.target.paused) e.target.play();
+                                                            else e.target.pause();
                                                         }}
                                                     />
                                                 </div>
 
+                                                {/* LE TEXTE */}
                                                 <div className="flex flex-col text-[#ccc6ba] max-w-sm md:max-w-md lg:max-w-lg pr-4">
-                                                    
-                                                    {/* TITLE */}
+                                                    {/* TITRE */}
                                                     <h2 className={`${evaText} origin-left text-8xl`}>
                                                         {videoName}
                                                     </h2>
@@ -206,7 +209,6 @@ export default function Animations() {
                                                     <p className="font-sans-serif text-[#ccc6ba] uppercase font-[700] scale-x-[0.8] origin-left text-4xl [text-shadow:0_0_5px_rgba(255,255,255,0.5),0_0_15px_rgba(255,255,255,0.3)]">
                                                         {videoDate}
                                                     </p>
-
                                                 </div>
                                                 
                                             </div>

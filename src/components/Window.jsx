@@ -1,11 +1,8 @@
 import { useState } from 'react'; 
 
-export default function Window({ media, date }) {
+export default function Window({ media, date, title }) {
 
     const isVideo = media?.match(/\.(mp4|webm|ogg)$/i);
-
-    const rawName = media.split('/').pop();
-    const cleanName = decodeURIComponent(rawName).replace(/\.[^/.]+$/, "");
 
     const [isLandscape, setIsLandscape] = useState(false);
 
@@ -62,7 +59,7 @@ export default function Window({ media, date }) {
                 </div>
 
 
-               <h1 className={`${evaText} text-5xl mt-4`}>{cleanName}</h1>
+               <h1 className={`${evaText} text-5xl mt-4`}>{title}</h1>
                 <h1 className={`font-sans-serif text-white uppercase font-[700] scale-x-[0.8] origin-left text-3xl [text-shadow:0_0_5px_rgba(255,255,255,0.5),0_0_15px_rgba(255,255,255,0.3)]`}>
                     {date}
                 </h1>
