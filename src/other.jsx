@@ -357,7 +357,7 @@ export default function Other() {
                         </div>
 
 
-                        <div className="fixed bottom-0 left-0 w-full z-[100] pointer-events-none">
+                        <div className={`fixed bottom-0 left-0 w-full z-[100] pointer-events-none ${isTVClicked ? "opacity-0" : "opacity-100"}`}>
                             <GradualBlur
                                 target="parent"
                                 position="bottom"
