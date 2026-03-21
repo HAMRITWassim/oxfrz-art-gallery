@@ -1,12 +1,12 @@
 import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
-import { useState, useRef, useMemo} from 'react';
+import { useState, useMemo, useLayoutEffect} from 'react';
 
 //components
 import CurvedLoop from './components/CurvedLoop';
 import RotatingText from "./components/RotatingText";
 import FaultyTerminal from './components/FaultyTerminal';
 
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 
 if (typeof history !== 'undefined' && 'scrollRestoration' in history) {
@@ -15,8 +15,10 @@ if (typeof history !== 'undefined' && 'scrollRestoration' in history) {
 
 function Home() {
 
-    const container = useRef();
     const pageNames = ["DRAWINGS","ANIMATIONS","OTHERS"];
+
+    const navigate = useNavigate();
+    const location = useLocation();
 
     const[i, set_i] = useState(0);
     const[isTextHovered, setIsTextHovered] = useState(false);
@@ -24,8 +26,10 @@ function Home() {
     const[direction, setDirection] = useState(1);
     const[upTri, setUpTri] = useState("△");
     const[downTri, setDownTri] = useState("▽");
+    const isComingFromDrawings = location.state && location.state.scrollToBottom;
+    const [isReady, setIsReady] = useState(!isComingFromDrawings);
 
-    const navigate = useNavigate();
+
 
 
     // FRAMER MOTION
@@ -52,10 +56,42 @@ function Home() {
     const scaleY = useTransform(smoothScrollY2, [200, 800, 900, 1600], [0, 1, 1, 0]);
     const origin = useTransform(smoothScrollY, [200, 800, 900, 1600], [0, 0, 1, 1]);
 
+   useLayoutEffect(() => {
+        if (isComingFromDrawings) {
+            const bottomPosition = document.documentElement.scrollHeight;
+            
+            window.scrollTo({ top: bottomPosition, behavior: 'auto' });
+
+            scrollY.jump(bottomPosition);
+            smoothScrollY.jump(bottomPosition);
+            smoothScrollY2.jump(bottomPosition);
+
+
+            window.history.replaceState({}, document.title);
+
+            const timer = setTimeout(() => {
+                setIsReady(true);
+            }, 50);
+
+            return () => clearTimeout(timer);
+        } else {
+            window.scrollTo({ top: 0, behavior: 'auto' });
+            scrollY.jump(0);
+            smoothScrollY.jump(0);
+            smoothScrollY2.jump(0);
+            setIsReady(true);
+        }
+    }, [isComingFromDrawings, scrollY, smoothScrollY, smoothScrollY2]);
     
   return (
 
-    <div className='w-full h-[800vh] z-0 relative bg-[#ffca2c]' ref={container}>
+   <div 
+        className='w-full h-[800vh] z-0 relative bg-[#ffca2c]'
+        style={{ 
+            opacity: isReady ? 1 : 0, 
+            transition: 'opacity 0.1s ease-out' 
+        }}
+    >
 
         <style dangerouslySetInnerHTML={{__html: `
           html, body {
@@ -71,6 +107,7 @@ function Home() {
 
         <div className="fixed inset-0 -z-20 pointer-events-none bg-[#ffca2c] scale-[1.2]">
             
+            {/* BACKGROUND */}
             <div className="absolute inset-0 w-full h-full mix-blend-screen opacity-90">
                 {useMemo(() => (
                     <FaultyTerminal
@@ -94,6 +131,7 @@ function Home() {
             </div>
         </div>
 
+        {/* ASCII BILLY BAT */}
         <pre style={{ 
             fontFamily: 'monospace', 
             lineHeight: '1.2', 
@@ -136,7 +174,7 @@ function Home() {
         </pre>
 
     
-        {/* TITRE */}
+        {/* CURVED TITLE */}
         <div className="w-full z-10 relative -mt-96"> 
             <CurvedLoop 
                 marqueeText="OXFRZ's ✦ ART ✦ GALLERYㅤㅤㅤ"
@@ -174,12 +212,14 @@ function Home() {
 
                 <div className='relative inline-block h-[40vh] md:h-[60vh] lg:h-[75vh]'>
 
+                    {/* MAIN TV */}
                     <img
                     src='./tv_clear.png'
                     className='h-full w-auto relative z-30 block pointer-events-none'
                     alt='TV'
                     />
 
+                    {/* TV TRANSITION */}
                     {isTextClicked && (
                     <video 
                         width="100%" 
@@ -192,89 +232,91 @@ function Home() {
                     </video>
                     )}
 
-<div 
-    className="absolute top-[34%] left-[2%] w-[80%] h-[55%] rounded-xl overflow-hidden flex items-center justify-center bg-[#000000] transition-colors duration-300"
->
-    <div 
-        className={`absolute inset-0 z-0 transition-opacity duration-700 
-            ${isTextClicked ? "opacity-0" : "opacity-100"} 
-            bg-[radial-gradient(circle,_#FBE106_0%,_#fac023_60%,_#e88f15_100%)]`}
-    />
 
-    <div className="relative z-10 w-full h-full pointer-events-none">
+                    <div 
+                        className="absolute top-[34%] left-[2%] w-[80%] h-[55%] rounded-xl overflow-hidden flex items-center justify-center bg-[#000000] transition-colors duration-300"
+                    >
+                        <div 
+                            className={`absolute inset-0 z-0 transition-opacity duration-700 
+                                ${isTextClicked ? "opacity-0" : "opacity-100"} 
+                                bg-[radial-gradient(circle,_#FBE106_0%,_#fac023_60%,_#e88f15_100%)]`}
+                        />
 
-        <span 
-        className={`absolute left-[45%] top-[5%] text-2xl text-[#6E3918] pointer-events-auto hover:cursor-pointer transition-opacity duration-300 ${isTextClicked ? "opacity-0" : "opacity-100"}`}
-        
-        onClick={ () => {
-            setDirection(-1)
-            if(i==0) { set_i(pageNames.length - 1); } else { set_i(i-1) }
-        }}
-        
-        onMouseEnter={ () => {
-            setUpTri("▲");
-        }} 
-        
-        onMouseLeave={ () => {
-            setUpTri("△")
-        }}
+                        <div className="relative z-10 w-full h-full pointer-events-none">
 
-        >{upTri}</span>
+                            <span 
+                            className={`absolute left-[45%] top-[5%] text-2xl text-[#6E3918] pointer-events-auto hover:cursor-pointer transition-opacity duration-300 ${isTextClicked ? "opacity-0" : "opacity-100"}`}
+                            
+                            onClick={ () => {
+                                setDirection(-1)
+                                if(i==0) { set_i(pageNames.length - 1); } else { set_i(i-1) }
+                            }}
+                            
+                            onMouseEnter={ () => {
+                                setUpTri("▲");
+                            }} 
+                            
+                            onMouseLeave={ () => {
+                                setUpTri("△")
+                            }}
 
-        <span className={`pointer-events-auto ${ isTextHovered ? 'text-[#ff7700]' : 'text-[#6E3918]' } text-6xl absolute left-[2%] top-[40%] transition-all duration-300 ${isTextClicked ? "opacity-0" : "opacity-100"}`}>
-            ▸
-        </span>
+                            >{upTri}</span>
 
-        <div 
-            className={`pointer-events-auto w-full h-full transition-all duration-300 flex items-center justify-center ${isTextClicked ? "opacity-0" : "opacity-100"}`}
+                            <span className={`pointer-events-auto ${ isTextHovered ? 'text-[#ff7700]' : 'text-[#6E3918]' } text-6xl absolute left-[2%] top-[40%] transition-all duration-300 ${isTextClicked ? "opacity-0" : "opacity-100"}`}>
+                                ▸
+                            </span>
 
-        >
-            <RotatingText
-                index={i}               
-                texts={pageNames}  
-                direction={direction}   
-                mainClassName="font-persona text-[#6E3918] text-[2.5em] hover:text-[2.7em] hover:text-[#ff7700] transition-all duration-300 overflow-hidden py-8 hover:cursor-pointer"
-                staggerFrom={"last"}
-                staggerDuration={0.025}
-                splitLevelClassName="overflow-hidden pb-0.5"
+                            {/* TV TEXT */}
+                            <div 
+                                className={`pointer-events-auto w-full h-full transition-all duration-300 flex items-center justify-center ${isTextClicked ? "opacity-0" : "opacity-100"}`}
 
-                onMouseEnter={() => setIsTextHovered(true)}
-                onMouseLeave={() => setIsTextHovered(false)}
+                            >
+                                <RotatingText
+                                    index={i}               
+                                    texts={pageNames}  
+                                    direction={direction}   
+                                    mainClassName="font-persona text-[#6E3918] text-[2.5em] hover:text-[2.7em] hover:text-[#ff7700] transition-all duration-300 overflow-hidden py-8 hover:cursor-pointer"
+                                    staggerFrom={"last"}
+                                    staggerDuration={0.025}
+                                    splitLevelClassName="overflow-hidden pb-0.5"
 
-                onClick={() => {
-                    window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
-                    setTimeout( () => { setIsTextClicked(true); }, 300)
+                                    onMouseEnter={() => setIsTextHovered(true)}
+                                    onMouseLeave={() => setIsTextHovered(false)}
 
-                    const destination = pageNames[i].toLowerCase();
+                                    onClick={() => {
+                                        window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+                                        setTimeout( () => { setIsTextClicked(true); }, 300)
 
-                    setTimeout(() => {
-                        navigate(`/${destination}`)
-                    }, 3400)
-                }}
-            />
+                                        const destination = pageNames[i].toLowerCase();
 
-        </div>
+                                        setTimeout(() => {
+                                            navigate(`/${destination}`)
+                                        }, 3400)
+                                    }}
+                                />
 
-        <span
-        className={`absolute left-[45%] bottom-[5%] text-2xl text-[#6E3918] pointer-events-auto hover:cursor-pointer transition-opacity duration-300 ${isTextClicked ? "opacity-0" : "opacity-100"}`}
-       
-        onClick={() => {
-            setDirection(1);
-            set_i((i+1) % pageNames.length);
-        }}
+                            </div>
 
-        onMouseEnter={ () => {
-            setDownTri("▼");
-        }}  
+                            <span
+                            className={`absolute left-[45%] bottom-[5%] text-2xl text-[#6E3918] pointer-events-auto hover:cursor-pointer transition-opacity duration-300 ${isTextClicked ? "opacity-0" : "opacity-100"}`}
+                        
+                            onClick={() => {
+                                setDirection(1);
+                                set_i((i+1) % pageNames.length);
+                            }}
 
-        onMouseLeave={ () => {
-            setDownTri("▽")
-        }}
+                            onMouseEnter={ () => {
+                                setDownTri("▼");
+                            }}  
 
-        >{downTri}</span>
+                            onMouseLeave={ () => {
+                                setDownTri("▽")
+                            }}
 
-    </div>
-</div>
+                            >{downTri}</span>
+
+                        </div>
+                    </div>
 
                 </div>
 

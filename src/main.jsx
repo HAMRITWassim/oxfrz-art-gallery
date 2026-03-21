@@ -5,6 +5,7 @@ import './index.css'
 
 import Home from './home.jsx'
 import Drawings from "./drawings.jsx"
+import Animations from './animations.jsx'
 
 
 const router = createBrowserRouter([
@@ -20,10 +21,10 @@ const router = createBrowserRouter([
     element: <Drawings />
   },
 
-  //   {
-  //   path: "/animations",
-  //   element: <Animations />
-  // },
+    {
+    path: "/animations",
+    element: <Animations />
+  },
 
   // {
   //   path: "/other",
