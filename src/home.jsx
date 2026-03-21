@@ -15,7 +15,7 @@ if (typeof history !== 'undefined' && 'scrollRestoration' in history) {
 
 function Home() {
 
-    const pageNames = ["DRAWINGS","ANIMATIONS","OTHERS"];
+    const pageNames = ["DRAWINGS","ANIMATIONS","OTHER"];
 
     const navigate = useNavigate();
     const location = useLocation();

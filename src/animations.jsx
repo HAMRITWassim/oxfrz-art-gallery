@@ -1,4 +1,3 @@
-import React from 'react'
 import { useState, useRef, useEffect, useCallback} from 'react';
 import { motion, useScroll, useSpring, useTransform } from 'framer-motion';
 
@@ -102,7 +101,7 @@ export default function Animations() {
 
                 <Aurora
                 colorStops={["#64397e","#a12c22","#64397e"]}
-                amplitude={0.1}
+                amplitude={0.3}
                 blend={0.5}
                 />
 
