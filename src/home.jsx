@@ -5,6 +5,7 @@ import { useState, useMemo, useLayoutEffect} from 'react';
 import CurvedLoop from './components/CurvedLoop';
 import RotatingText from "./components/RotatingText";
 import FaultyTerminal from './components/FaultyTerminal';
+import BlurText from './components/BlurText';
 
 import { useNavigate, useLocation } from 'react-router-dom';
 
@@ -14,6 +15,9 @@ if (typeof history !== 'undefined' && 'scrollRestoration' in history) {
 }
 
 function Home() {
+
+    const evaText = " font-[900] font-times inline-block scale-x-[0.57] origin-center uppercase [text-shadow:0_0_5px_rgba(255,255,255,0.8),0_0_15px_rgba(255,255,255,0.3)]"
+
 
     const pageNames = ["DRAWINGS","ANIMATIONS","OTHER"];
 
@@ -55,6 +59,7 @@ function Home() {
     const scale3 = useTransform(smoothScrollY, [1600,2100], [0,1]);
     const scaleY = useTransform(smoothScrollY2, [200, 800, 900, 1600], [0, 1, 1, 0]);
     const origin = useTransform(smoothScrollY, [200, 800, 900, 1600], [0, 0, 1, 1]);
+    const titleOpacity = useTransform(smoothScrollY, [0,600], [1,0]);
 
    useLayoutEffect(() => {
         if (isComingFromDrawings) {
@@ -82,6 +87,12 @@ function Home() {
             setIsReady(true);
         }
     }, [isComingFromDrawings, scrollY, smoothScrollY, smoothScrollY2]);
+
+
+
+    const handleAnimationComplete = () => {
+        console.log('Animation completed!');
+    };
     
   return (
 
@@ -134,12 +145,13 @@ function Home() {
         {/* ASCII BILLY BAT */}
         <pre style={{ 
             fontFamily: 'monospace', 
-            lineHeight: '1.2', 
+            lineHeight: '1.1', 
             color: '#6E3918', 
             whiteSpace: 'pre',
             textAlign: 'center',
             marginTop: '2%',
-            fontSize:"30%"
+            fontSize:"4px",
+            height:"6cqw"
         }}>
         {`
                                                                 ██                                         
@@ -173,19 +185,56 @@ function Home() {
         `}
         </pre>
 
-    
-        {/* CURVED TITLE */}
-        <div className="w-full z-10 relative -mt-96"> 
-            <CurvedLoop 
-                marqueeText="OXFRZ's ✦ ART ✦ GALLERYㅤㅤㅤ"
-                speed={2}
-                curveAmount={300}
-                direction="right"
-                interactive
-                className="custom-text-style font-bitcount text-[#6E3918] "
-            />
-        </div>
 
+
+        <motion.div 
+            className='relative flex flex-col items-center w-full mt-4 mb-20 pointer-events-none'
+            style={{opacity: titleOpacity}}
+        >
+            <BlurText
+                text="OXFRZ"
+                delay={200}
+                animateBy="words"
+                direction="bottom"
+                onAnimationComplete={handleAnimationComplete}
+                className={`${evaText} text-[#6E3918] text-[28cqw] leading-none`}
+            /> 
+
+
+            <div className="flex justify-center items-center scale-x-[0.8]">
+
+                <BlurText
+                    text="✦"
+                    delay={200}
+                    animateBy="words"
+                    direction="bottom"
+                    onAnimationComplete={handleAnimationComplete}
+                    className={`font-sans-serif text-[#6E3918] uppercase font-[700]  text-[6cqw] leading-none -mt-[4cqw] [text-shadow:0_0_5px_rgba(255,255,255,0.5),0_0_15px_rgba(255,255,255,0.3)]`}
+                /> 
+
+
+                <BlurText
+                    text=" ART GALLERY "
+                    delay={200}
+                    direction="bottom"
+                    onAnimationComplete={handleAnimationComplete}
+                    className={`font-sans-serif text-[#6E3918] uppercase font-[700]  text-[10cqw] leading-none -mt-[4cqw] [text-shadow:0_0_5px_rgba(255,255,255,0.5),0_0_15px_rgba(255,255,255,0.3)]`}
+                /> 
+
+
+                <BlurText
+                    text="✦"
+                    delay={200}
+                    animateBy="words"
+                    direction="bottom"
+                    onAnimationComplete={handleAnimationComplete}
+                    className={`font-sans-serif text-[#6E3918] uppercase font-[700] text-[6cqw] leading-none -mt-[4cqw] [text-shadow:0_0_5px_rgba(255,255,255,0.5),0_0_15px_rgba(255,255,255,0.3)]`}
+                /> 
+
+
+            </div>
+
+        </motion.div>
 
         
 
