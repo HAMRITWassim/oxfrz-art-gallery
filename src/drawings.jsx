@@ -58,54 +58,62 @@ function Drawings() {
 
         // TRIE LES IMAGES (ratio 16/9 ou 9/16)
         const organizeMedia = async () => {
-            const portraits = [];
-            const landscapes = [];
+                    const portraits = [];
+                    const landscapes = [];
 
-            
-           const checkDimensions = rawImages.map((mediaItem) => {
-                return new Promise((resolve) => {
-                    
-                    const date = mediaDates[mediaItem.originalFilename] || "Date not found";
-                    const url = mediaItem.url;
+                    const checkDimensions = rawImages.map((mediaItem) => {
+                        return new Promise((resolve) => {
+                            const date = mediaDates[mediaItem.originalFilename] || "Date not found";
+                            const url = mediaItem.url;
+                            const cleanTitle = mediaItem.originalFilename.replace(/\.[^/.]+$/, "");
 
-                    const cleanTitle = mediaItem.originalFilename.replace(/\.[^/.]+$/, "");
+                            const isVideo = url.match(/\.(mp4|webm|ogg)$/i);
+                            if (isVideo) {
+                                const video = document.createElement('video');
+                                video.onloadedmetadata = () => {
+                                    resolve({ url, isLandscape: video.videoWidth > video.videoHeight, date, title: cleanTitle });
+                                };
+                                video.src = url;
+                            } else {
+                                const img = new Image();
+                                img.onload = () => {
+                                    resolve({ url, isLandscape: img.naturalWidth > img.naturalHeight, date, title: cleanTitle });
+                                };
+                                img.src = url;
+                            }
+                        });
+                    });
 
-                    const isVideo = url.match(/\.(mp4|webm|ogg)$/i);
-                    if (isVideo) {
-                        const video = document.createElement('video');
-                        video.onloadedmetadata = () => {
-                            resolve({ url, isLandscape: video.videoWidth > video.videoHeight, date, title: cleanTitle });
-                        };
-                        video.src = url;
-                    } else {
-                        const img = new Image();
-                        img.onload = () => {
-                            resolve({ url, isLandscape: img.naturalWidth > img.naturalHeight, date, title: cleanTitle });
-                        };
-                        img.src = url;
+                    const results = await Promise.all(checkDimensions);
+
+                    //Tri par date décroissante
+                    results.sort((a, b) => {
+                        const dateA = new Date(a.date).getTime();
+                        const dateB = new Date(b.date).getTime();
+                        
+                        if (isNaN(dateA)) return 1;
+                        if (isNaN(dateB)) return -1;
+
+                        return dateB - dateA; 
+                    });
+
+                    results.forEach(item => {
+                        if (item.isLandscape) landscapes.push(item);
+                        else portraits.push(item);
+                    });
+
+                    const arranged = [];
+                    let pIndex = 0;
+                    let lIndex = 0;
+
+                    while (pIndex < portraits.length || lIndex < landscapes.length) {
+                        if (pIndex < portraits.length) arranged.push(portraits[pIndex++]);
+                        if (pIndex < portraits.length) arranged.push(portraits[pIndex++]);
+                        if (lIndex < landscapes.length) arranged.push(landscapes[lIndex++]);
                     }
-                });
-            });
 
-            const results = await Promise.all(checkDimensions);
-
-            results.forEach(item => {
-                if (item.isLandscape) landscapes.push(item);
-                else portraits.push(item);
-            });
-
-            const arranged = [];
-            let pIndex = 0;
-            let lIndex = 0;
-
-            while (pIndex < portraits.length || lIndex < landscapes.length) {
-                if (pIndex < portraits.length) arranged.push(portraits[pIndex++]);
-                if (pIndex < portraits.length) arranged.push(portraits[pIndex++]);
-                if (lIndex < landscapes.length) arranged.push(landscapes[lIndex++]);
-            }
-
-            setSortedMedia(arranged.filter(item => item !== undefined));
-        };
+                    setSortedMedia(arranged.filter(item => item !== undefined));
+                };
 
         organizeMedia();
     }, []);

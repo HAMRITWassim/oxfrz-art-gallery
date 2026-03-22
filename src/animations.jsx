@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect, useCallback} from 'react';
-import { motion, useScroll, useSpring, useTransform } from 'framer-motion';
+import { motion, useScroll, useSpring, useTransform, useInView} from 'framer-motion';
 
 //components
 import Aurora from './components/Aurora';
@@ -19,12 +19,99 @@ const animationModules = import.meta.glob('./assets/animations/*.{mp4,webm,ogg}'
     import: 'default' 
 });
 
-const animations = Object.entries(animationModules).map(([path, url]) => {
+const rawAnimations = Object.entries(animationModules).map(([path, url]) => {
     return {
         originalName: decodeURIComponent(path.split('/').pop()), 
         url: url 
     };
 });
+
+// 2. On crée le tableau trié par date
+const animations = rawAnimations.sort((a, b) => {
+    // On va chercher les dates dans ton fichier mediaDates.js
+    const dateStrA = mediaDates[a.originalName];
+    const dateStrB = mediaDates[b.originalName];
+
+    // On convertit en "vrai" format date pour le JavaScript
+    // Si une vidéo n'a pas de date, on lui donne une date très ancienne (0)
+    const timeA = dateStrA ? new Date(dateStrA).getTime() : 0;
+    const timeB = dateStrB ? new Date(dateStrB).getTime() : 0;
+    
+    // Si une des dates est au mauvais format, on la renvoie à la fin
+    if (isNaN(timeA)) return 1;
+    if (isNaN(timeB)) return -1;
+
+    // Tri décroissant (les plus récents en premier)
+    return timeB - timeA;
+});
+
+const VideoSlide = ({ item, index, videoName, videoDate, evaText, isActive }) => {
+    const [isLandscape, setIsLandscape] = useState(false);
+    
+    const slideVideoRef = useRef(null);
+
+    useEffect(() => {
+        if (slideVideoRef.current) {
+            if (isActive) {
+                slideVideoRef.current.currentTime = 0;
+                slideVideoRef.current.play().catch(e => console.log("Erreur lecture:", e));
+            } else {
+                slideVideoRef.current.pause();
+            }
+        }
+    }, [isActive]);
+
+    const handleMetadataLoad = (e) => {
+        const { videoWidth, videoHeight } = e.target;
+        if (videoWidth > videoHeight) {
+            setIsLandscape(true);
+        } else {
+            setIsLandscape(false);
+        }
+    };
+
+    return (
+        <div 
+            className={`flex-[0_0_100%] min-w-0 h-[70vh] md:h-[80vh] flex justify-center 
+                ${isLandscape ? "flex-col items-center gap-6" : "flex-row items-center justify-start pl-8 md:pl-16 lg:pl-24 gap-8 md:gap-16"}`
+            }
+        >
+            <div 
+                className={`relative shrink-0 transition-all duration-500 flex items-center justify-center 
+                    ${isLandscape ? "w-[70vw] md:w-[60vw] lg:w-[50vw] aspect-video h-auto" : "h-[70vh] md:h-[80vh] aspect-[9/16] w-auto"}`
+                }
+            >
+                <video 
+                    ref={slideVideoRef}
+                    src={item.url}
+                    muted
+                    preload="metadata" 
+                    loop 
+                    playsInline
+                    onLoadedMetadata={handleMetadataLoad}
+                    className="w-full h-full object-cover rounded-xl cursor-pointer shadow-[0_0_25px_rgba(0,0,0,0.5)]" 
+                    onClick={(e) => {
+                        if (e.target.paused) e.target.play();
+                        else e.target.pause();
+                    }}
+                />
+            </div>
+
+            <div 
+                className={`flex flex-col text-[#ccc6ba] shrink-0
+                    ${isLandscape ? "items-center text-center w-full" : "items-start max-w-sm md:max-w-md lg:max-w-lg pr-4 min-w-[250px]"}`
+                }
+            >
+                <h2 className={`${evaText} text-8xl whitespace-nowrap ${isLandscape ? "origin-center" : "origin-left"}`}>
+                    {videoName}
+                </h2>
+                <p className={`font-sans-serif text-[#ccc6ba] uppercase font-[700] scale-x-[0.8] text-4xl pb-4 leading-normal [text-shadow:0_0_5px_rgba(255,255,255,0.5),0_0_15px_rgba(255,255,255,0.3)] ${isLandscape ? "origin-center" : "origin-left"}`}>
+                    {videoDate}
+                </p>
+            </div>
+        </div>
+    );
+};
 
 
 
@@ -33,6 +120,7 @@ export default function Animations() {
     const evaText = "font-[900] font-times inline-block scale-x-[0.57] origin-center uppercase [text-shadow:0_0_5px_rgba(255,255,255,0.8),0_0_15px_rgba(255,255,255,0.3)]"
 
     const videoRef = useRef(null);
+    const carouselContainerRef = useRef(null);
     
 
     const [isTVClicked, setIsTVClicked] = useState(false);
@@ -91,6 +179,8 @@ export default function Animations() {
     const handleAnimationComplete = () => {
         console.log('Animation completed!');
     };
+
+    const isCarouselVisible = useInView(carouselContainerRef, { amount: 0.2 });
 
     return (
 
@@ -162,55 +252,31 @@ export default function Animations() {
             </motion.div>
 
 
-            <div className="relative w-full max-w-6xl mx-auto z-20 cursor-grab active:cursor-grabbing">
+            <div className="relative w-full max-w-6xl mx-auto z-20 cursor-grab active:cursor-grabbing"
+            ref={carouselContainerRef}
+            >
                     {animations.length === 0 ? (
                         <div className="text-white text-center">No Video Found</div>
                     ) : (
                         <>
                             <div className="overflow-hidden" ref={emblaRef}>
-                                <div className="flex touch-pan-y touch-pinch-zoom">
-
+                                <div className="flex touch-pan-y touch-pinch-zoom items-center">
                                     {animations.map((item, index) => {
-    
+
                                         const rawFilename = item.originalName;
                                         const videoDate = mediaDates[rawFilename] || "";
-                                        
                                         const videoName = rawFilename.replace(/\.[^/.]+$/, "");
 
                                         return (
-                                            <div key={index} className="flex-[0_0_100%] min-w-0 h-[70vh] md:h-[80vh] flex items-center justify-start pl-8 md:pl-16 lg:pl-24 gap-8 md:gap-16">
-                                                
-                                                {/* LA VIDÉO */}
-                                                <div className="relative h-full aspect-[9/16] shrink-0 hover:cursor-default">
-                                                    <video 
-                                                        src={item.url}
-                                                        autoPlay 
-                                                        muted
-                                                        preload="auto" 
-                                                        loop 
-                                                        playsInline
-                                                        className="w-full h-full object-cover rounded-xl cursor-pointer" 
-                                                        onClick={(e) => {
-                                                            if (e.target.paused) e.target.play();
-                                                            else e.target.pause();
-                                                        }}
-                                                    />
-                                                </div>
-
-                                                {/* LE TEXTE */}
-                                                <div className="flex flex-col text-[#ccc6ba] max-w-sm md:max-w-md lg:max-w-lg pr-4">
-                                                    {/* TITRE */}
-                                                    <h2 className={`${evaText} origin-left text-8xl`}>
-                                                        {videoName}
-                                                    </h2>
-                                                    
-                                                    {/* DATE */}
-                                                    <p className="font-sans-serif text-[#ccc6ba] uppercase font-[700] scale-x-[0.8] origin-left text-4xl [text-shadow:0_0_5px_rgba(255,255,255,0.5),0_0_15px_rgba(255,255,255,0.3)]">
-                                                        {videoDate}
-                                                    </p>
-                                                </div>
-                                                
-                                            </div>
+                                            <VideoSlide 
+                                                key={index}
+                                                item={item}
+                                                index={index}
+                                                videoName={videoName}
+                                                videoDate={videoDate}
+                                                evaText={evaText}
+                                                isActive={index === selectedIndex && isCarouselVisible}
+                                            />
                                         )
                                     })}
                                 </div>
