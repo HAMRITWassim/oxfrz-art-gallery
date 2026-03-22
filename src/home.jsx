@@ -295,7 +295,7 @@ function Home() {
                         <div className="relative z-10 w-full h-full pointer-events-none">
 
                             <span 
-                            className={`absolute left-[45%] top-[5%] text-2xl text-[#6E3918] pointer-events-auto hover:cursor-pointer transition-opacity duration-300 ${isTextClicked ? "opacity-0" : "opacity-100"}`}
+                            className={`absolute left-[45%] top-[5%] text-[2cqw] text-[#6E3918] pointer-events-auto hover:cursor-pointer transition-opacity duration-300 ${isTextClicked ? "opacity-0" : "opacity-100"}`}
                             
                             onClick={ () => {
                                 setDirection(-1)
@@ -312,7 +312,7 @@ function Home() {
 
                             >{upTri}</span>
 
-                            <span className={`pointer-events-auto ${ isTextHovered ? 'text-[#ff7700]' : 'text-[#6E3918]' } text-6xl absolute left-[2%] top-[40%] transition-all duration-300 ${isTextClicked ? "opacity-0" : "opacity-100"}`}>
+                            <span className={`pointer-events-auto ${ isTextHovered ? 'text-[#ff7700]' : 'text-[#6E3918]' } text-[3cqw] absolute left-[2%] top-[39%] transition-all duration-300 ${isTextClicked ? "opacity-0" : "opacity-100"}`}>
                                 ▸
                             </span>
 
@@ -325,7 +325,7 @@ function Home() {
                                     index={i}               
                                     texts={pageNames}  
                                     direction={direction}   
-                                    mainClassName="font-persona text-[#6E3918] text-[2.5em] hover:text-[2.7em] hover:text-[#ff7700] transition-all duration-300 overflow-hidden py-8 hover:cursor-pointer"
+                                    mainClassName="font-persona text-[#6E3918] text-[2.8cqw] hover:text-[2.85cqw] hover:text-[#ff7700] transition-all duration-300 overflow-hidden py-8 hover:cursor-pointer"
                                     staggerFrom={"last"}
                                     staggerDuration={0.025}
                                     splitLevelClassName="overflow-hidden pb-0.5"
@@ -348,7 +348,7 @@ function Home() {
                             </div>
 
                             <span
-                            className={`absolute left-[45%] bottom-[5%] text-2xl text-[#6E3918] pointer-events-auto hover:cursor-pointer transition-opacity duration-300 ${isTextClicked ? "opacity-0" : "opacity-100"}`}
+                            className={`absolute left-[45%] bottom-[5%] text-[2cqw] text-[#6E3918] pointer-events-auto hover:cursor-pointer transition-opacity duration-300 ${isTextClicked ? "opacity-0" : "opacity-100"}`}
                         
                             onClick={() => {
                                 setDirection(1);
