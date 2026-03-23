@@ -36,6 +36,9 @@ export const mediaDates = {
     "YUJI.jpg" : "april 28, 2024",
     "Yuji's 1000 Yard Stare.jpg" : "december 27, 2023",
     "YUTA.jpg" : "December 28, 2023",
+    "spear of longinus.jpg" : "March 8, 2025",
+    "Chi..jpg" : "March 15,2025",
+    "adamu.jpg" : "March 8,2025",
 
 
 
@@ -55,6 +58,7 @@ export const mediaDates = {
     "H0TLINEMIAMI.mp4" : "June 4, 2025",
     "hirakoshinji.mp4" : "August 6, 2025",
     "higuruma.mp4" : "January 20, 2026",
+    
 
 
 

@@ -52,8 +52,18 @@ function Home() {
         restDelta: 0.001
     });
 
-    const opacityTV = useTransform(smoothScrollY, [2000,3400], [0,1]);
-    const scaleTV = useTransform(smoothScrollY, [2000,3400], [0, 1.2]);
+    const yTVTarget = useTransform(scrollY, [2000, 3400], [100, 0]);
+
+    const bouncyTVNumber = useSpring(yTVTarget, {
+    stiffness: 160, 
+        damping: 14,   
+        mass: 0.8,      
+        restDelta: 0.001
+    });
+
+    
+    const yTV = useTransform(bouncyTVNumber, (val) => `${val}vh`);
+    const scaleTV = useTransform(bouncyTVNumber, [100, 0], [0.3, 1.1]);
     const scale1 = useTransform(smoothScrollY, [600,1100], [0,1]);
     const scale2 = useTransform(smoothScrollY, [1100,1600], [0,1]);
     const scale3 = useTransform(smoothScrollY, [1600,2100], [0,1]);
@@ -242,7 +252,8 @@ function Home() {
         <motion.div  
         className='sticky top-14 flex items-center justify-center  z-20'
         style={{
-            opacity: opacityTV,
+            
+            y:yTV,
             scale: scaleTV,
         }}
         >

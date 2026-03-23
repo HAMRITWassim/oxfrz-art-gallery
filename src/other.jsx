@@ -301,21 +301,18 @@ export default function Other() {
                             </div>
 
                             {/* SPOTIFY */}
-                            <div className="relative flex w-fit mx-12 h-[400px] items-center rounded-3xl p-12 self-end">
+                            <div className="relative flex w-fit mx-12 h-[400px] items-center rounded-3xl p-12 z-10 self-end">
                                 
                                 <div 
-                                    className="absolute inset-0 bg-white/5 rounded-3xl pointer-events-none"
+
+                                    className="absolute inset-0 bg-white/5 backdrop-blur-xl rounded-3xl pointer-events-none"
                                     style={{
-                                        WebkitMaskImage: 'radial-gradient(ellipse at center, black 40%, transparent 100%)',
-                                        maskImage: 'radial-gradient(ellipse at center, black 40%, transparent 100%)'
+                                        WebkitMaskImage: 'radial-gradient(ellipse at center, black 40%, rgba(0,0,0,0.7) 100%)',
+                                        maskImage: 'radial-gradient(ellipse at center, black 40%, rgba(0,0,0,0.7) 100%)'
                                     }}
                                 />
 
-
-
-                                
                                 <div className="relative flex flex-col items-end">
-
                                     <h2
                                     className={`hover:cursor-pointer ${isSPhovered ? "text-[#ccc6ba]" : "text-[#8ea9a9]" }  transition-all duration-500  relative z-10 ${evaText}  text-9xl origin-right mr-3`}
                                     onClick={handleSPclick}
@@ -333,9 +330,7 @@ export default function Other() {
                                     >
                                         My playlists
                                     </h2>
-
                                 </div>
-
 
                                 <svg 
                                 onClick={handleSPclick}
@@ -348,9 +343,6 @@ export default function Other() {
                                 viewBox="0 0 16 16">
                                     <path d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0m3.669 11.538a.5.5 0 0 1-.686.165c-1.879-1.147-4.243-1.407-7.028-.77a.499.499 0 0 1-.222-.973c3.048-.696 5.662-.397 7.77.892a.5.5 0 0 1 .166.686m.979-2.178a.624.624 0 0 1-.858.205c-2.15-1.321-5.428-1.704-7.972-.932a.625.625 0 0 1-.362-1.194c2.905-.881 6.517-.454 8.986 1.063a.624.624 0 0 1 .206.858m.084-2.268C10.154 5.56 5.9 5.419 3.438 6.166a.748.748 0 1 1-.434-1.432c2.825-.857 7.523-.692 10.492 1.07a.747.747 0 1 1-.764 1.288"/>
                                 </svg>
-    
-                                
-                                
                             </div>
 
       
@@ -369,9 +361,35 @@ export default function Other() {
                             />
                         </div>
 
-
-
-
+                        
+                        <motion.div 
+                            className="absolute bottom-[-150px] left-1/2 w-[600px] h-[600px] rounded-full pointer-events-none z-0 opacity-80"
+                            style={{ 
+                                x: "-50%",
+                                backgroundColor: "#568d9a", 
+                                backgroundImage: `
+                                    radial-gradient(circle at 35% 35%, #739f9a 0%, #739f9a 40%, transparent 100%)
+                                `,
+                            }}
+                            animate={{ 
+                                boxShadow: [
+                                    "0 0 120px 20px rgba(115, 159, 154, 0.4), 0 0 250px 60px rgba(86, 141, 154, 0.2)",
+                                    "0 0 180px 40px rgba(115, 159, 154, 0.6), 0 0 400px 120px rgba(86, 141, 154, 0.3)",
+                                    "0 0 120px 20px rgba(115, 159, 154, 0.4), 0 0 250px 60px rgba(86, 141, 154, 0.2)"
+                                ]
+                            }}
+                            transition={{
+                                duration: 7,
+                                repeat: Infinity,
+                                ease: "easeInOut"
+                            }}
+                        >
+                            <img 
+                                src={`${import.meta.env.BASE_URL}moon.png`} 
+                                alt="Moon" 
+                                className="w-full h-full object-cover rounded-full opacity-60 mix-blend-overlay blur-sm"
+                            />
+                        </motion.div>
 
 
 
