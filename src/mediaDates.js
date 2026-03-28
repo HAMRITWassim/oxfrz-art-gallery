@@ -58,6 +58,8 @@ export const mediaDates = {
     "H0TLINEMIAMI.mp4" : "June 4, 2025",
     "hirakoshinji.mp4" : "August 6, 2025",
     "higuruma.mp4" : "January 20, 2026",
+    "CELESTE ANIMATION.mp4" : "March 28, 2026",
+
     
 
 
