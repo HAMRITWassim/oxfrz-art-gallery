@@ -11,7 +11,7 @@ export const mediaDates = {
     "YOKOSO WATASHI NO HAMSTER SOCIETY.jpg" : "February 10, 2025",
     "memento mori.jpg" : "september 20, 2025",
     "The_world_hasnt_ended_yet.jpg" : "January 6, 2026",
-    "CSM DAP UP.jpg" : "November 14, 2026",
+    "CSM DAP UP.jpg" : "November 14, 2025",
     "BABY GOJO.jpg" : "April 23 2024",
     "BABYGUMI.jpg" : "March 23, 2024",
     "choso thousand yard stare.jpg" : "April 27, 2024",
@@ -39,6 +39,7 @@ export const mediaDates = {
     "spear of longinus.jpg" : "March 8, 2025",
     "Chi..jpg" : "March 15,2025",
     "adamu.jpg" : "March 8,2025",
+    "AYANAMI REI P3R.jpg" : "March 31, 2026",
 
 
 
