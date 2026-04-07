@@ -40,6 +40,7 @@ export const mediaDates = {
     "Chi..jpg" : "March 15,2025",
     "adamu.jpg" : "March 8,2025",
     "AYANAMI REI P3R.jpg" : "March 31, 2026",
+    "VERGIL DMC3.jpg" : "April 5, 2026",
 
 
 
