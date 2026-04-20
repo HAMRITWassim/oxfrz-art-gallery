@@ -41,6 +41,10 @@ export const mediaDates = {
     "adamu.jpg" : "March 8,2025",
     "AYANAMI REI P3R.jpg" : "March 31, 2026",
     "VERGIL DMC3.jpg" : "April 5, 2026",
+    "GYRO SMILE.jpg" : "April 17, 2026",
+    "GYRO GEM ALERT.jpg" : "April 12, 2026",
+    "pucci.jpg" : "April 10, 2026",
+
 
 
 
@@ -61,6 +65,7 @@ export const mediaDates = {
     "hirakoshinji.mp4" : "August 6, 2025",
     "higuruma.mp4" : "January 20, 2026",
     "CELESTE ANIMATION.mp4" : "March 28, 2026",
+    "OXFRZ RED.mp4" : "April 9, 2026",
 
     
 
