@@ -44,6 +44,23 @@ export const mediaDates = {
     "GYRO SMILE.jpg" : "April 17, 2026",
     "GYRO GEM ALERT.jpg" : "April 12, 2026",
     "pucci.jpg" : "April 10, 2026",
+    "punpun rain.jpg" : "July 29, 2022",
+    "Giogio.jpg" : "April 29, 2023",
+    "Jacket.jpg" : "July 15, 2023",
+    "Fury Ngannou.jpg" : "October 27, 2023",
+    "Z!LLAKAMI.jpg" : "September 8, 2023",
+    "Tengoku Daimakyouu.jpg" : "January 10, 2024",
+    "THUKUNA.jpg" : "April 19, 2024",
+    "MAHITO EYE.jpg" : "April 25, 2024",
+    "KENDRICK SOSUKE.jpg" : "May 6, 2024",
+    "GOJO BRAINROT.jpg" : "May 26, 2024",
+    "FRIEREN MOTION.jpg" : "July 6, 2024",
+    "HAJIME NO IPPO (COMISSION).jpg" : "July 25, 2024",
+    "HIGURUMA (COMISSION).jpg" : "September 1, 2024",
+    "SHIZAA.jpg" : "October 25, 2024",
+    "aiko.jpg" : "October 26, 2024",
+    "chono hina.jpg" : "March 28, 2025",
+    "Jabber Wonger.jpg" : "October 28, 2025",
 
 
 
