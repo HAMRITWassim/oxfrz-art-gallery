@@ -61,6 +61,12 @@ export const mediaDates = {
     "aiko.jpg" : "October 26, 2024",
     "chono hina.jpg" : "March 28, 2025",
     "Jabber Wonger.jpg" : "October 28, 2025",
+    "ulquiorra cifer.jpg" : "March 15,2025",
+    "hangyaku no lelouch.jpg" : "March 12,2025",
+    "shigeo kageyama.jpg" : "March 9,2025",
+    "the fullmetal alchemist.jpg" : "March 11,2025",
+    "Fujino.jpg" : "March 9,2025",
+    "the shape of voice.jpg" : "March 9,2025",
 
 
 
